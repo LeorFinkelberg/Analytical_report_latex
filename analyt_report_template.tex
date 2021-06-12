@@ -5,12 +5,12 @@
 \begin{document}
 
 \title{Аналитический отчет по ...} % заголовок отчета
-\author{\itshape Иванов И.И.} % автор работы
-\date{} % просим LaTeX не указаывать дату, так как будет
+\author{\itshape Иванов И.И.} % имя автора работы
+\date{} % просим LaTeX не указывать дату, так как будет
         % использован наш вариант оформления даты, описанный в стилевом файле
 \maketitle % создать заголовок
 
-\thispagestyle{fancy}
+\thispagestyle{fancy} % задает стиль страницы
 
 В этой части можно разместить аннотацию к отчету. \TeX -- это издательская система компьютерной верстки, предназначенная для набора ...
 
@@ -27,7 +27,6 @@
 \section{Пример группового размещения формул}
 
 Несколько формул можно разместить в одной группе с помощью окружения \texttt{gather}
-
 \begin{gather}
 	\sum_{j \in \mathbf{N}} b_{ij} \hat{y}_{j} = \sum_{j \in \mathbf{N}} b_{ij}^\lambda \hat{y}_j + (b_{ii} - \lambda_i)\hat{y}_i \hat{y},\notag \\
 	\det \mathbf{K}(t=1, t_1, \ldots, t_n) = \sum_{I \in \mathbf{n} } (-1)^{|I|} \prod_{i \in I} t_i \prod_{j \in I} (D_j + \lambda_j t_j) \det \mathbf{A}^{(\lambda)} (\, \overline{I} | \overline{I} \,) = 0,\tag{$a$} \\
@@ -37,8 +36,8 @@
 \section{Простая однострочная формула}
 
 Теорема Хинчина-Винера утверждает, что спектральная плотность мощности стационарного в широком смысле случайного процесса представляет собой преобразование Фурье от соответствующей автокорреляционной функции
-\begin{align*}
+\begin{equation*}
     S_{xx}(f) = \int\limits_{-\infty}^{\infty}  \, r_{xx} (\tau) e^{-j 2 \pi f \tau} \mathrm{d} \tau,\ \text{где}\ r_{xx}(\tau) = \mathbb{E}[\,x(t) \, x^{*}(t - \tau)\,].
-\end{align*}
+\end{equation*}
 
 \end{document}
