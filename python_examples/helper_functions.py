@@ -1,19 +1,43 @@
 import base64
+import logging
+import sys
 from typing import NoReturn
 import streamlit as st
+from pathlib2 import Path
+
+
+def make_stream_handler() -> logging.FileHandler:
+    """
+    Настравивает потоковый хендлер
+    """
+    stream_handler = logging.StreamHandler(sys.stdout)
+    stream_handler.setLevel(logging.INFO)
+    stream_handler.setFormatter(logging.Formatter(_log_format))
+    return stream_handler
+
+
+def make_logger(logger_name: str) -> logging.Logger:    
+    logger = logging.getLogger(logger_name)
+    logger.setLevel(logging.INFO)
+    logger.addHandler(make_stream_handler())
+    return logger
+
+
+_log_format = "[%(asctime)s | %(levelname)s]: %(message)s"
+logger = make_logger(__name__)
 
 
 def text_downloader(multiline: str) -> NoReturn:
     """
     Принимает LaTeX-шаблон документа в виде многострочной строки и
-    создает на форме ссылку для скачивания шаблона
+    создает на странице ссылку для скачивания шаблона
     """
-    OUTPUT_TXT_FILENAME = "base_template_for_latex.tex"
+    OUTPUT_TEX_FILENAME = "base_template_for_latex.tex"
     
     b64 = base64.b64encode(multiline.encode()).decode()
-    st.markdown("#### Download File ####")
+    # создает ссылку для скачивания файла
     href = (f'<a href="data:file/txt;base64,{b64}" '
-            f'download="{OUTPUT_TXT_FILENAME}">Скачать LaTeX-файл</a>')
+            f'download="{OUTPUT_TEX_FILENAME}">Скачать опорный tex-файл для сборки аналитического отчета в LaTeX</a>')
     st.markdown(href, unsafe_allow_html=True)
 
 
@@ -22,40 +46,33 @@ def prepare_multiline_for_latex(
     title: str,
     author: str,
     Y_NB: float,
-) -> NoReturn:
-    template = f"""
-\\documentclass{{article}}
+    Y_WL: float,
+    Y_TB: float,
+) -> str:
+    """
+    Читает txt-загатовку для LaTeX и возвращает подготовленный LaTeX-шаблон
+    в виде строки
+    """
+    WORK_DIR = Path("python_examples").absolute()
+    LATEX_TEMPLATE_FILENAME = "latex_template_for_python.txt" # <-- NB: txt, а не tex
+    LATEX_TEMPLATE_PATH = WORK_DIR.joinpath(Path(LATEX_TEMPLATE_FILENAME))
 
-\\usepackage{{style_template}}
+    try:
+        with open(LATEX_TEMPLATE_PATH, encoding="utf-8") as f:
+            template = f.read()
+    except FileNotFoundError as err:
+        logger.error(err)
+    except FileExistsError as err:
+        logger.error(err)
 
-\\begin{{document}}
+    return template.format(
+        title=title,
+        author=author,
+        Y_NB=Y_NB,
+        Y_WL=Y_WL,
+        Y_TB=Y_TB
+    )
 
-\\title{{ {title} }} % заголовок отчета
-\\author{{\\itshape {author} }} % имя автора работы
-\\date{{}} % просим LaTeX не указывать дату, так как будет
-% использован наш вариант оформления даты, описанный в стилевом файле
-\\maketitle % создать заголовок
 
-\\thispagestyle{{fancy}} % задает стиль страницы
-
-\\tableofcontents
-
-\\section{{Оценка УСТАЛОСТНОЙ долговечности по модели J.W. Miles}}
-
-Модель Miles \\cite{{miles-1954}}, строго говоря, применима только к узкополосным случайным процессам (процессам с узким энергетическим спектром), поэтому при нагружении широкополосными процессами модель дает слишком консервативные оценки
-
-\\begin{{align}}\\label{{eq:miles}}
-	Y_{{NB}}(s_{{\\sigma}}) = \\Big[ \\, \\dfrac{{f}}{{C}} \\, ( \\sqrt{{2}} s_{{\\sigma}} )^m \\, \\Gamma \\bigg( 1 + \\dfrac{{m}}{{2}} \\bigg) \\, \\Big]^{{-1}}, \\ C = \\sigma_{{-1\\text{{д}}}}^m N_0,
-\\end{{align}}
-где $ f $ -- эффективная частота случайного процесса, Гц; $ \\sigma_{{-1\\text{{д}}}} $ -- предел выносливости детали, МПа; $ s_{{\\sigma}} $ -- стандартное отклонение случайного процесса, МПа; $ m $ -- тангенс угла наклона левой ветви кривой выносливости; $ \\Gamma(\\cdot) $ -- гамма-функция.
-
-Усталостная долговечность по модели \\eqref{{eq:miles}} составляет $ Y_{{NB}} = {Y_NB:.2f} $, сек.
-
-\\begin{{thebibliography}}{{99}}\\addcontentsline{{toc}}{{section}}{{Список литературы}}
-	\\bibitem{{miles-1954}}{{\\emph{{Miles J.W.}} On structural fatigue under random loading // Journal Aueronaut Science. 1954. V. 21. P. 753 -- 762.}}
-\\end{{thebibliography}}
-
-\\end{{document}}
-""".strip()
-
-    text_downloader(template)
+if __name__ == "__main__":
+    print("Этот вспомогательный модуль. Его не нужно запускать напрямую")
