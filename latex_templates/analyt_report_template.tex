@@ -1,0 +1,30 @@
+\documentclass{article}
+
+\usepackage{style_template}
+
+\begin{document}
+\title{Аналитический отчет по ...} % заголовок отчета
+\author{\itshape Иванов И.И.} % имя автора работы
+\date{} % просим LaTeX не указывать дату, так как будет
+        % использован наш вариант оформления даты, описанный в стилевом файле
+\maketitle % создать заголовок
+
+\thispagestyle{fancy} % задает стиль страницы
+
+\tableofcontents
+
+\section{Расчет усталостной долговечности по модели J.W. Miles}
+
+Модель Miles \cite{miles-1954}, строго говоря, применима только к \emph{узкополосным} случайным процессам -- то есть к процессам с узким энергетическим спектром -- поэтому при нагружении \emph{широкополосными} процессами -- соответственно процессами с относительно широким энергетическим спектром -- модель дает чрезмерно консервативные оценки усталостной долговечности
+\begin{align}\label{eq:miles}
+	Y_{NB}(s_{\sigma}) = \Big[ \, \dfrac{f}{C} \, ( \sqrt{2} s_{\sigma} )^m \, \Gamma \bigg( 1 + \dfrac{m}{2} \bigg) \, \Big]^{-1}, \ C = \sigma_{-1\text{д}}^m N_0,
+\end{align}
+где $ f $ -- эффективная частота случайного процесса, Гц; $ \sigma_{-1\text{д}} $ -- предел выносливости детали, МПа; $ s_{\sigma} $ -- стандартное отклонение случайного процесса, МПа; $ m $ -- тангенс угла наклона левой ветви кривой выносливости; $ \Gamma(\cdot) $ -- гамма-функция.
+
+Усталостная долговечность по модели \eqref{eq:miles} составляет $ Y_{NB} = $...
+
+\begin{thebibliography}{99}\addcontentsline{toc}{section}{Список литературы}
+	\bibitem{miles-1954}{\emph{Miles J.W.} On structural fatigue under random loading // Journal Aueronaut Science. 1954. V. 21. P. 753 -- 762.}
+\end{thebibliography}
+
+\end{document}
