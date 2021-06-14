@@ -2,6 +2,7 @@ import base64
 import logging
 import sys
 from typing import NoReturn
+
 import streamlit as st
 from pathlib2 import Path
 
@@ -16,7 +17,7 @@ def make_stream_handler() -> logging.FileHandler:
     return stream_handler
 
 
-def make_logger(logger_name: str) -> logging.Logger:    
+def make_logger(logger_name: str) -> logging.Logger:
     logger = logging.getLogger(logger_name)
     logger.setLevel(logging.INFO)
     logger.addHandler(make_stream_handler())
@@ -33,11 +34,13 @@ def text_downloader(multiline: str) -> NoReturn:
     создает на странице ссылку для скачивания шаблона
     """
     OUTPUT_TEX_FILENAME = "base_template_for_latex.tex"
-    
+
     b64 = base64.b64encode(multiline.encode()).decode()
     # создает ссылку для скачивания файла
-    href = (f'<a href="data:file/txt;base64,{b64}" '
-            f'download="{OUTPUT_TEX_FILENAME}">Скачать опорный tex-файл для сборки аналитического отчета в LaTeX</a>')
+    href = (
+        f'<a href="data:file/txt;base64,{b64}" '
+        f'download="{OUTPUT_TEX_FILENAME}">Скачать опорный tex-файл для сборки аналитического отчета в LaTeX</a>'
+    )
     st.markdown(href, unsafe_allow_html=True)
 
 
@@ -54,7 +57,9 @@ def prepare_multiline_for_latex(
     в виде строки
     """
     WORK_DIR = Path("python_examples").absolute()
-    LATEX_TEMPLATE_FILENAME = "latex_template_for_python.txt" # <-- NB: txt, а не tex
+    LATEX_TEMPLATE_FILENAME = (
+        "latex_template_for_python.txt"  # <-- NB: txt, а не tex
+    )
     LATEX_TEMPLATE_PATH = WORK_DIR.joinpath(Path(LATEX_TEMPLATE_FILENAME))
 
     try:
@@ -66,11 +71,7 @@ def prepare_multiline_for_latex(
         logger.error(err)
 
     return template.format(
-        title=title,
-        author=author,
-        Y_NB=Y_NB,
-        Y_WL=Y_WL,
-        Y_TB=Y_TB
+        title=title, author=author, Y_NB=Y_NB, Y_WL=Y_WL, Y_TB=Y_TB
     )
 
 

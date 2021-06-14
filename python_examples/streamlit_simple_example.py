@@ -1,10 +1,11 @@
-import streamlit as st
 import math
-import pandas as pd
-from pandas import Series
-import plotly.graph_objects as go
+
 import numpy as np
 import numpy.random as rnd
+import pandas as pd
+import plotly.graph_objects as go
+import streamlit as st
+from pandas import Series
 
 title_app = "Простой пример использования библиотеки Streamlit"
 st.set_page_config(
