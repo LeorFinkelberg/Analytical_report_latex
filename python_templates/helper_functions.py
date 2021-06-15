@@ -56,7 +56,9 @@ def prepare_multiline_for_latex(
     Читает txt-загатовку для LaTeX и возвращает подготовленный LaTeX-шаблон
     в виде строки
     """
-    LATEX_TEMPLATE_PATH = Path("latex_template_for_python.txt")
+    WORK_DIR = Path("python_templates")
+    LATEX_TEMPLATE_FILE = Path("latex_template_for_python.txt")
+    LATEX_TEMPLATE_PATH = WORK_DIR.joinpath(LATEX_TEMPLATE_FILE)
 
     try:
         with open(LATEX_TEMPLATE_PATH, encoding="utf-8") as f:
