@@ -5,21 +5,27 @@
 - LaTeX-редактор [TeXstudio].
 
 #### Порядок работы с приложением
-- Создать директорию проекта
+- Создать директорию проекта, поддиректорию latex для файлов \*.tex и \*.sty и поддиректорию figures для графических материалов
 ```bash
-$ mkdir my_project
+$ mkdir my_project 
+$ mkdir my_project/latex 
+$ mkdir my_project/latex/figures
 ```
-- Скопировать в созданную директорию файлы из директории `python_examples/`, а именно:
-    - опорный LaTeX-шаблон `latex_template_for_python.txt` (каркас LaTeX-документа) и стилевой файл `latex_templates/style_templates.sty` (конфигурирует макет страницы),
+- Скопировать в директорию `my_project` файлы из директории `python_examples/`:
     - главный сценарий `streamlit_analyt_report_example.py` (здесь должна быть реализована логика Streamlit),
-    - вспомогательный сценарий `helper_functions.py` (здесь собраны вспомогательные функции)
-- Запустить Streamlit-приложение
+    - вспомогательный сценарий `helper_functions.py` (здесь собраны вспомогательные функции),
+	- опорный LaTeX-шаблон `latex_template_for_python.txt` (каркас LaTeX-документа).
+- В директорию `my_project/latex` скопировать:
+    - стилевой файл из `latex_templates/style_templates.sty` (конфигурирует макет страницы).
+- А в директорию `my_project/latex/figures` скопировать:
+    - графические материалы, которые должны войти в аналитический отчет.
+- Из корня проекта запустить Streamlit-приложение
 ```bash
-$ streamlit run python_examples/streamlit_analyt_report_example.py
+$ streamlit run streamlit_analyt_report_example.py
 ```
 - На главной странице приложения задать значения управляющих параметров
-- Скачать в рабочую директорию проекта подготовленный tex-файл (`base_template_for_latex.tex`)
-- Запустить в рабочей директории pdf-компилятор (дважды!), передав ему имя tex-файла
+- Скачать в поддиректорию проекта `my_project/latex` созданный приложением файл `base_template_for_latex.tex`
+- Запустить в директории `my_project/latex` pdf-компилятор (дважды!), передав ему имя tex-файла
 ```bash
 $ pdflatex base_template_for_latex.tex
 ```
